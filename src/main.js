@@ -15,7 +15,6 @@ let currentPage = 1;
 let currentQuery = '';
 let totalHits = 0;
 
-// Инициализация SimpleLightbox
 lightbox = new SimpleLightbox('.gallery-item a', {
     captions: true,
     captionsData: 'alt',
@@ -29,7 +28,7 @@ async function loadImages(query, page = 1) {
         const { images, totalHits: hits } = await fetchImages(query, page);
 
         if (page === 1) {
-            totalHits = hits; // Сохраняем общее количество результатов
+            totalHits = hits;
             displayImages(images, true);
         } else {
             displayImages(images, false);
@@ -37,6 +36,18 @@ async function loadImages(query, page = 1) {
 
         lightbox.refresh();
         const currentImageCount = document.querySelectorAll('.gallery-item').length;
+
+        // Получаем высоту одной карточки галереи
+        const galleryItem = document.querySelector('.gallery-item');
+        const cardHeight = galleryItem ? galleryItem.getBoundingClientRect().height : 0;
+
+        // Прокручиваем страницу на две высоты карточки
+        if (cardHeight > 0) {
+            window.scrollBy({
+                top: 2 * cardHeight, // Прокручиваем на 2 высоты карточки
+                behavior: 'smooth' // Плавная прокрутка
+            });
+        }
 
         // Проверка: скрыть кнопку и показать сообщение, если все результаты загружены
         if (currentImageCount >= totalHits) {
@@ -85,3 +96,4 @@ loadMoreButton.addEventListener('click', () => {
     currentPage += 1;
     loadImages(currentQuery, currentPage);
 });
+
