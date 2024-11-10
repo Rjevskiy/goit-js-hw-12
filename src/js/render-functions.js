@@ -16,5 +16,5 @@ export function displayImages(images, clear = false) {
         </div>
     `).join('');
 
-    gallery.insertAdjacentHTML('beforeend', markup); // Добавляем разметку к существующим элементам
+    gallery.insertAdjacentHTML('beforeend', markup); 
 }

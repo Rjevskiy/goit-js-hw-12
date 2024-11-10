@@ -10,7 +10,7 @@ export async function fetchImages(query, page = 1) {
         throw new Error('Ошибка при получении данных');
     }
 
-    // Возвращаем `hits` и `totalHits` для дальнейшей проверки
+    
     return {
         images: response.data.hits,
         totalHits: response.data.totalHits

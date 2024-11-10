@@ -41,15 +41,15 @@ async function loadImages(query, page = 1) {
         const galleryItem = document.querySelector('.gallery-item');
         const cardHeight = galleryItem ? galleryItem.getBoundingClientRect().height : 0;
 
-        // Прокручиваем страницу на две высоты карточки
+        // Прокручиваем страницу на две высоты карточки и плавная прокрутка
         if (cardHeight > 0) {
             window.scrollBy({
-                top: 2 * cardHeight, // Прокручиваем на 2 высоты карточки
-                behavior: 'smooth' // Плавная прокрутка
+                top: 2 * cardHeight, 
+                behavior: 'smooth' 
             });
         }
 
-        // Проверка: скрыть кнопку и показать сообщение, если все результаты загружены
+        // Проверка: скрыть кнопку и показать сообщение
         if (currentImageCount >= totalHits) {
             loadMoreButton.style.display = 'none';
             iziToast.info({
@@ -91,7 +91,7 @@ form.addEventListener('submit', (event) => {
     loadImages(currentQuery, currentPage);
 });
 
-// Обработчик для кнопки "Load More"
+// Обработчик  "Load More"
 loadMoreButton.addEventListener('click', () => {
     currentPage += 1;
     loadImages(currentQuery, currentPage);
