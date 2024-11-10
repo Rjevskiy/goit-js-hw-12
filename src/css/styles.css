@@ -73,23 +73,30 @@ line-height: 1.5;}
     padding-left: 16px;
     letter-spacing: 0.06em}
 
+
+
+/*
 .gallery{display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    column-gap: 24px;
+    column-gap: 20px;
     row-gap: 24px;
     margin-top: 32px;
-    margin-left: 152px;
-    margin-right: 152px;}   
-
+    margin-left: 156px;
+    margin-right: 156px;
+    height: 150px;
+    height: 780px;
+    }   
+*/
 .gallery-item {
-    width: 360px;
+    width: 300px;
     border-radius: 8px;
-    border: 2px solid #808080;}
+    border: 2px solid #808080;
+   /* height: 230px; */ }
 
 .info{
     display: flex;
-    margin-left: 20px;}
+    margin-left: 10px;}
 
 .loader {
     border: 8px solid #f3f3f3; 
@@ -112,3 +119,54 @@ line-height: 1.5;}
     100% {
         transform: rotate(360deg);
     }}
+
+
+img{
+    height: 190px;
+    width: 360px;
+}
+
+
+.gallery-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    /* Минимальная высота экрана */
+    justify-content: flex-start;
+    align-items: center;
+    
+    column-gap: 20px;
+    row-gap: 24px;
+    margin-top: 32px;
+    margin-left: 156px;
+    margin-right: 156px;
+    /* Отступ снизу для кнопки */
+}
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    /* Заменяем row-gap и column-gap */
+    max-width: 1700px;
+    /* Максимальная ширина галереи */
+    justify-content: center;
+    
+}
+
+.load-more {
+    width: 200px;
+    margin-top: 200 px;
+    /* Чтобы кнопка располагалась внизу */
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.load-more:hover {
+    background-color: #0056b3;
+}

@@ -8,7 +8,12 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 const form = document.getElementById('search-form');
 const input = document.getElementById('search-input');
 const loader = document.getElementById('loader');
+const loadMoreButton = document.getElementById('load-more');
 let lightbox;
+
+// Глобальные переменные для отслеживания состояния поиска
+let currentPage = 1;
+let currentQuery = '';
 
 // Инициализация SimpleLightbox
 lightbox = new SimpleLightbox('.gallery-item a', {
@@ -17,11 +22,37 @@ lightbox = new SimpleLightbox('.gallery-item a', {
     captionDelay: 250
 });
 
-form.addEventListener('submit', async (event) => {
+// Функция для загрузки изображений
+async function loadImages(query, page = 1) {
+    try {
+        loader.style.display = 'block';
+        const images = await fetchImages(query, page);
+
+        if (page === 1) {
+            displayImages(images, true); // Очищаем галерею при первом запросе
+        } else {
+            displayImages(images, false); // Добавляем изображения к существующим при загрузке доп. страниц
+        }
+
+        lightbox.refresh();
+        loadMoreButton.style.display = images.length === 15 ? 'block' : 'none'; // Показ кнопки только если есть еще изображения
+
+    } catch (error) {
+        iziToast.error({
+            title: "Error",
+            message: "Failed to fetch images. Please try again later.",
+            position: 'topRight'
+        });
+    } finally {
+        loader.style.display = 'none';
+    }
+}
+
+// Обработчик формы
+form.addEventListener('submit', (event) => {
     event.preventDefault();
     const query = input.value.trim();
 
-    // Проверка на пустой запрос
     if (!query) {
         iziToast.warning({
             title: "Warning",
@@ -31,34 +62,14 @@ form.addEventListener('submit', async (event) => {
         return;
     }
 
-    // Показ индикатора загрузки
-    loader.style.display = 'block';
+    currentQuery = query;
+    currentPage = 1;
+    loadMoreButton.style.display = 'none'; // Скрываем кнопку перед загрузкой
+    loadImages(currentQuery, currentPage);
+});
 
-    try {
-        // Запрос на получение изображений
-        const images = await fetchImages(query);
-
-        // Проверка на пустой массив изображений
-        if (images.length === 0) {
-            iziToast.info({
-                title: "Sorry",
-                message: "Sorry, there are no images matching your search query. Please try again!",
-                position: 'topRight'
-            });
-            return;
-        }
-
-        // Отображение изображений и обновление SimpleLightbox
-        displayImages(images);
-        lightbox.refresh();
-    } catch (error) {
-        iziToast.error({
-            title: "Error",
-            message: "Failed to fetch images. Please try again later.",
-            position: 'topRight'
-        });
-    } finally {
-        // Скрытие индикатора загрузки
-        loader.style.display = 'none';
-    }
+// Обработчик для кнопки "Load More"
+loadMoreButton.addEventListener('click', () => {
+    currentPage += 1;
+    loadImages(currentQuery, currentPage);
 });

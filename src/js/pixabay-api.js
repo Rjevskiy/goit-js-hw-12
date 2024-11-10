@@ -1,29 +1,17 @@
 
 
-// export async function fetchImages(query) {
-//     const API_KEY = '46859112-8db04929d193e6e9d044d366e';
-//     const BASE_URL = 'https://pixabay.com/api/';
-//     const url = `${BASE_URL}?key=${API_KEY}&q=${query}&image_type=photo&orientation=horizontal&safesearch=true`; // Используйте обратные кавычки
-
-//     const response = await fetch(url);
-//     if (!response.ok) {
-//         throw new Error('Ошибка при получении данных');
-//     }
-//     const data = await response.json();
-//     return data.hits; 
-// }
 
 import axios from 'axios';
 
-export async function fetchImages(query) {
+export async function fetchImages(query, page = 1) {
     const API_KEY = '46859112-8db04929d193e6e9d044d366e';
     const BASE_URL = 'https://pixabay.com/api/';
-    const url = `${BASE_URL}?key=${API_KEY}&q=${query}&image_type=photo&orientation=horizontal&safesearch=true`;
+    const url = `${BASE_URL}?key=${API_KEY}&q=${query}&image_type=photo&orientation=horizontal&safesearch=true&per_page=15&page=${page}`;
 
-    try {
-        const response = await axios.get(url);
-        return response.data.hits; // Возвращаем массив изображений
-    } catch (error) {
+    const response = await axios.get(url);
+    if (response.status !== 200) {
         throw new Error('Ошибка при получении данных');
     }
+
+    return response.data.hits;
 }

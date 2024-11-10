@@ -1,6 +1,7 @@
-export function displayImages(images) {
+export function displayImages(images, clear = false) {
     const gallery = document.getElementById('gallery');
-    gallery.innerHTML = ''; 
+    if (clear) gallery.innerHTML = ''; // Очищаем галерею, если clear = true
+
     const markup = images.map(image => `
         <div class="gallery-item">
             <a href="${image.largeImageURL}" class="lightbox">
@@ -15,5 +16,5 @@ export function displayImages(images) {
         </div>
     `).join('');
 
-    gallery.innerHTML = markup;
+    gallery.insertAdjacentHTML('beforeend', markup); // Добавляем разметку к существующим элементам
 }
