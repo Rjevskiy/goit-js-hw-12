@@ -1,7 +1,7 @@
 export function displayImages(images, clear = false) {
     const gallery = document.getElementById('gallery');
-    if (clear) gallery.innerHTML = ''; // Очищаем галерею, если clear = true
-
+    // Очищаем галерею, если clear = true
+    if (clear) gallery.innerHTML = ''; 
     const markup = images.map(image => `
         <div class="gallery-item">
             <a href="${image.largeImageURL}" class="lightbox">
