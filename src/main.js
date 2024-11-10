@@ -11,9 +11,9 @@ const loader = document.getElementById('loader');
 const loadMoreButton = document.getElementById('load-more');
 let lightbox;
 
-// Глобальные переменные для отслеживания состояния поиска
 let currentPage = 1;
 let currentQuery = '';
+let totalHits = 0;
 
 // Инициализация SimpleLightbox
 lightbox = new SimpleLightbox('.gallery-item a', {
@@ -26,17 +26,29 @@ lightbox = new SimpleLightbox('.gallery-item a', {
 async function loadImages(query, page = 1) {
     try {
         loader.style.display = 'block';
-        const images = await fetchImages(query, page);
+        const { images, totalHits: hits } = await fetchImages(query, page);
 
         if (page === 1) {
-            displayImages(images, true); // Очищаем галерею при первом запросе
+            totalHits = hits; // Сохраняем общее количество результатов
+            displayImages(images, true);
         } else {
-            displayImages(images, false); // Добавляем изображения к существующим при загрузке доп. страниц
+            displayImages(images, false);
         }
 
         lightbox.refresh();
-        loadMoreButton.style.display = images.length === 15 ? 'block' : 'none'; // Показ кнопки только если есть еще изображения
+        const currentImageCount = document.querySelectorAll('.gallery-item').length;
 
+        // Проверка: скрыть кнопку и показать сообщение, если все результаты загружены
+        if (currentImageCount >= totalHits) {
+            loadMoreButton.style.display = 'none';
+            iziToast.info({
+                title: "Info",
+                message: "We're sorry, but you've reached the end of search results.",
+                position: 'topRight'
+            });
+        } else {
+            loadMoreButton.style.display = 'block';
+        }
     } catch (error) {
         iziToast.error({
             title: "Error",
@@ -64,7 +76,7 @@ form.addEventListener('submit', (event) => {
 
     currentQuery = query;
     currentPage = 1;
-    loadMoreButton.style.display = 'none'; // Скрываем кнопку перед загрузкой
+    loadMoreButton.style.display = 'none';
     loadImages(currentQuery, currentPage);
 });
 

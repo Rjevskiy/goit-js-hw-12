@@ -122,7 +122,7 @@ line-height: 1.5;}
 
 
 img{
-    height: 190px;
+    height: 200px;
     width: 360px;
 }
 
@@ -132,7 +132,7 @@ img{
     flex-direction: column;
     min-height: 100vh;
     /* Минимальная высота экрана */
-    justify-content: flex-start;
+   
     align-items: center;
     
     column-gap: 20px;
